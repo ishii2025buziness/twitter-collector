@@ -4,14 +4,14 @@ version = "0.1.0"
 description = "Twitter/X collection pipeline backed by twitter-cli"
 requires-python = ">=3.12"
 dependencies = [
-    "pipeline-common",
+    "asset-maximizer-common",
     "pydantic>=2.0",
     "pydantic-settings>=2.0",
     "pyyaml",
 ]
 
 [tool.uv.sources]
-pipeline-common = { path = "../common" }
+asset-maximizer-common = { path = "../common" }
 
 [project.optional-dependencies]
 dev = [
