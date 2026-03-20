@@ -1,0 +1,2 @@
+"""Twitter collector package."""
+

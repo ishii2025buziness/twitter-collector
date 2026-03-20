@@ -1,0 +1,17 @@
+collections:
+  - name: home-for-you
+    kind: feed
+    feed_type: for-you
+    max_items: 100
+  - name: home-following
+    kind: feed
+    feed_type: following
+    max_items: 100
+  - name: bookmarks
+    kind: bookmarks
+    max_items: 100
+    remove_after_collect: true
+  - name: likes
+    kind: likes
+    max_items: 100
+    remove_after_collect: true

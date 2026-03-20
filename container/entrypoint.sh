@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-# Service entrypoint template
-# サービス固有の処理（auth設定等）はこのファイルの上部に追加する
+# Twitter Collector container entrypoint
 set -euo pipefail
 
-SERVICE_NAME={{SERVICE_NAME}}
-PACKAGE_DIR=/app
+SERVICE_NAME=twitter-collector
+PACKAGE_DIR=/app/app
 LOG_FILE="/data/pipeline-$(date +%Y%m%d).log"
 
 # Load .env if present
@@ -32,7 +31,7 @@ else
     cmd=(python -m cli run)
 fi
 
-PYTHONPATH=/app/src \
+PYTHONPATH=/app/common/src:/app/app/src \
     "${cmd[@]}" 2>&1 | tee -a "$LOG_FILE"
 
 echo "=== $SERVICE_NAME end: $(date -Iseconds) ===" | tee -a "$LOG_FILE"

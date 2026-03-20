@@ -1,21 +1,55 @@
-"""Service CLI entry point."""
+"""Standard CLI entrypoint for twitter-collector."""
 
 from __future__ import annotations
 
-from common.job_cli import run_job_cli
+import argparse
+import json
 
-from src.pipeline import check_pipeline, run_pipeline, smoke_pipeline
+from common.contracts import JobStatus
+
+from pipeline import check, run_pipeline, smoke
 
 
 def main(argv: list[str] | None = None) -> int:
-    return run_job_cli(
-        "service-name",
-        run_fn=run_pipeline,
-        smoke_fn=smoke_pipeline,
-        check_fn=check_pipeline,
-        argv=argv,
+    parser = argparse.ArgumentParser(prog="twitter-collector")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    run_parser = subparsers.add_parser("run")
+    run_parser.add_argument("--config", help="Override config path")
+
+    smoke_parser = subparsers.add_parser("smoke")
+    smoke_parser.add_argument("--config", help="Override config path")
+
+    check_parser = subparsers.add_parser("check")
+    check_parser.add_argument("--config", help="Override config path")
+
+    args = parser.parse_args(argv)
+
+    if args.command == "run":
+        result = run_pipeline(config_path=args.config)
+        print(json.dumps(result.model_dump(mode="json"), ensure_ascii=False, indent=2))
+        return 1 if result.status == JobStatus.FAILED else 0
+
+    if args.command == "smoke":
+        print(
+            json.dumps(
+                {"job": "twitter-collector", "command": "smoke", "result": smoke(config_path=args.config)},
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+
+    print(
+        json.dumps(
+            {"job": "twitter-collector", "command": "check", "result": check(config_path=args.config)},
+            ensure_ascii=False,
+            indent=2,
+        )
     )
+    return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

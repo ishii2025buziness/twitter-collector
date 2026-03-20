@@ -1,31 +1,27 @@
-# Service Containerfile template
-# {{SERVICE_NAME}} を実際のサービス名に置き換える
-FROM python:3.12-slim
+# Twitter Collector — scheduled Twitter/X collection pipeline
+# Build with: podman build -f container/Containerfile -t k12-twitter-collector:local .
+# from the twitter-collector repo root (app/ common/ container/ が必要)
+FROM python:3.12-bookworm
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl git ca-certificates \
+    git ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy source
-# ビルド時は app/ common/ container/ を build context として渡すこと
-# 例: rsync -av --exclude=infra --exclude=.git . k12:~/build/{{SERVICE_NAME}}/
-#     podman build -f container/Containerfile -t {{SERVICE_NAME}}:local .
 COPY app/ /app/app/
 COPY common/ /app/common/
 COPY container/ /app/container/
 
 WORKDIR /app/app
 
-# Install Python dependencies
 RUN python -m venv .venv \
     && .venv/bin/pip install --no-cache-dir \
         -e /app/common \
-        -e .
+        -e . \
+        "twitter-cli @ git+https://github.com/jackwener/twitter-cli.git@e496d8f8708d71800188cfb23f24b2b6fd4b94b9" \
+        python-dotenv
 
-# Prepare directories
 RUN mkdir -p /data /auth
 
-# Entrypoint
 COPY container/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
