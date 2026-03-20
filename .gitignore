@@ -1,0 +1,7 @@
+.artifacts/
+app/.artifacts/
+app/.venv/
+app/__pycache__/
+app/src/**/__pycache__/
+app/tests/__pycache__/
+infra/
