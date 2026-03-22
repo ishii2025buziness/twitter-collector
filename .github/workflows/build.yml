@@ -43,8 +43,8 @@ jobs:
           file: container/Containerfile
           push: true
           tags: |
-            ghcr.io/ishii2025buziness/twitter-collector:latest
-            ghcr.io/ishii2025buziness/twitter-collector:${{ github.run_id }}
+            ghcr.io/ishii2026buziness/twitter-collector:latest
+            ghcr.io/ishii2026buziness/twitter-collector:${{ github.run_id }}
 
   deploy:
     needs: build
