@@ -51,10 +51,4 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Deploy
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_ACTOR: ${{ github.actor }}
-        run: |
-          echo "$GH_TOKEN" | podman login ghcr.io -u "$GH_ACTOR" --password-stdin
-          podman pull ghcr.io/ishii2025buziness/twitter-collector:latest
-          echo 'Deploy OK: twitter-collector image updated'
+        run: sudo /run/current-system/sw/bin/systemctl restart twitter-collector
