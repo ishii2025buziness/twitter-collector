@@ -1,3 +1,12 @@
+## デプロイ方針（ADR-0004）
+
+このサービスは **uv2nix + systemd oneshot service** でK12にデプロイされる。
+
+- Podman/Containerfile/GHCRへのpushは**不要**（廃止済み）
+- K12へのデプロイ設定は `k12-network-notes` リポジトリの `nixos/modules/twitter-collector.nix` で管理
+- このサービスは `claude -p` を呼ばないため NixOS container 隔離は不要。単純な systemd oneshot service として動作する
+- `twitter-cli` は PyPI 未公開のgitパッケージ。uv2nix で git dep として処理される
+
 # Service Template
 
 新サービスのひな形リポジトリ。
