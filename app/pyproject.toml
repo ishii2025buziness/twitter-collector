@@ -8,10 +8,12 @@ dependencies = [
     "pydantic>=2.0",
     "pydantic-settings>=2.0",
     "pyyaml",
+    "twitter-cli @ git+https://github.com/jackwener/twitter-cli.git@e496d8f8708d71800188cfb23f24b2b6fd4b94b9",
 ]
 
 [tool.uv.sources]
-asset-maximizer-common = { path = "../common" }
+asset-maximizer-common = { workspace = true }
+twitter-cli = { git = "https://github.com/jackwener/twitter-cli.git", rev = "e496d8f8708d71800188cfb23f24b2b6fd4b94b9" }
 
 [project.optional-dependencies]
 dev = [
@@ -22,6 +24,9 @@ dev = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
