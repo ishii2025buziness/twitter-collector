@@ -10,7 +10,7 @@ from importlib import import_module
 from pathlib import Path
 
 _THIS_DIR = Path(__file__).parent
-ROOT = _THIS_DIR.parent
+ROOT = Path(os.environ["TWITTER_COLLECTOR_ROOT"]) if "TWITTER_COLLECTOR_ROOT" in os.environ else _THIS_DIR.parent
 _COMMON_SRC = ROOT.parent / "common" / "src"
 if str(_COMMON_SRC) not in sys.path:
     sys.path.insert(0, str(_COMMON_SRC))
