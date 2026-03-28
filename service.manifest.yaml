@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://github.com/ishii2025buziness/k12-network-notes/raw/main/schemas/service-manifest.schema.json
+
+name: twitter-collector
+description: Daily collection of Twitter feeds, bookmarks, and likes
+
+process:
+  entrypoint: python -m cli run
+  workdir: app
+
+input:
+  - type: external_api
+    name: twitter
+    description: Twitter/X feeds (for-you, following), bookmarks, likes via browser cookies
+  - type: file
+    name: config
+    description: Collection spec (keywords, accounts) at auth/config.yaml
+
+output:
+  - name: artifacts
+    path: data/.artifacts/
+    format: json
+    description: Collected tweets as structured JSON per collection run
+
+successCriteria:
+  - exitCode: 0
+  - freshArtifact:
+      path: data/.artifacts/*/result.json
+      maxAgeHours: 25
